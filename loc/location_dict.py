@@ -1,5 +1,7 @@
 import glob
 import json
+from collections import defaultdict
+import pandas as pd
 
 files = glob.glob("data/*.json")
 files.sort()
@@ -75,11 +77,27 @@ def names(v, suffix):
             break
     return n
 
+province = []
+city = []
+county = []
 for k, v in ret.items():
     if k[-4:] == '0000':
         n = names(v, province_suffix)
+        for i in n:
+            province.append((i, k))
     elif k[-2:] == '00':
         n = names(v, city_suffix)
+        for i in n:
+            city.append((i, k))
     else:
         n = names(v, county_suffix)
-    print("%s\t%s\t%s" % (k, ','.join(n), ','.join(matches(v))))
+        for i in n:
+            county.append((i, k))
+    #print("%s\t%s\t%s" % (k, ','.join(n), ','.join(matches(v))))
+province_df = pd.DataFrame(province)
+city_df = pd.DataFrame(city)
+county_df = pd.DataFrame(county)
+
+province_df.to_csv("province.txt", index=False, header=False)
+city_df.to_csv("city.txt", index=False, header=False)
+county_df.to_csv("county.txt", index=False, header=False)
