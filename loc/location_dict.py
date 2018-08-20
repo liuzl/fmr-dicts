@@ -2,6 +2,10 @@ import glob
 import json
 from collections import defaultdict
 import pandas as pd
+import sys
+
+current = False
+if len(sys.argv) > 1 and sys.argv[1] == "current": current = True
 
 files = glob.glob("data/*.json")
 files.sort()
@@ -9,6 +13,7 @@ ret = {}
 for f in files:
     items = json.loads(open(f).read())
     for k, v in items.items(): ret[k] = v
+    if current: break
 out = "loc_cn.json"
 #open(out, "w").write(json.dumps(ret, ensure_ascii=False, indent=2))
 print("write %d locations to %s" % (len(ret), out))
