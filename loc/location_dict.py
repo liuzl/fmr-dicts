@@ -9,13 +9,14 @@ if len(sys.argv) > 1 and sys.argv[1] == "current": current = True
 
 files = glob.glob("data/*.json")
 files.sort()
+files = [files[-1],]
 ret = {}
 for f in files:
     items = json.loads(open(f).read())
-    for k, v in items.items(): ret[k] = v
-    if current: break
+    for k, v in items.items():
+        ret[k] = v
 out = "loc_cn.json"
-#open(out, "w").write(json.dumps(ret, ensure_ascii=False, indent=2))
+open(out, "w").write(json.dumps(ret, ensure_ascii=False, indent=2))
 print("write %d locations to %s" % (len(ret), out))
 
 ethnic = open("../ethnicgroups/dict.txt").read().split()
